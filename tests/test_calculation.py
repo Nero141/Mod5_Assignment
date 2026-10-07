@@ -130,3 +130,11 @@ def test_from_dict_result_mismatch(caplog):
 
     # Assert
     assert "Loaded calculation result 10 differs from computed result 5" in caplog.text
+
+def test_calculation_operation_error():
+    with pytest.raises(OperationError, match="Calculation failed"):
+        Calculation(
+            operation="Addition",
+            operand1=Decimal("sNaN"),
+            operand2=Decimal("1")
+        )
