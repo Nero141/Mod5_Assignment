@@ -130,3 +130,7 @@ def test_from_dict_result_mismatch(caplog):
 
     # Assert
     assert "Loaded calculation result 10 differs from computed result 5" in caplog.text
+
+def test_operation_error_on_invalid_operand():
+    with pytest.raises(OperationError, match="Invalid calculation data"):
+        Calculation(operation="Addition", operand1=Decimal("invalid"), operand2=Decimal("3"))
