@@ -146,4 +146,4 @@ def test_calculation_string_error():
             operand1="1",
             operand2="3"
         )
-        assert str(calc) == "Addition: 1 + 3 = 4"
+        assert str(calc) == "Addition(1, 3) = 4"
