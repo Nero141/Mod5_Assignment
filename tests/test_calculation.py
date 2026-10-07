@@ -138,3 +138,12 @@ def test_calculation_operation_error():
             operand1=Decimal("sNaN"),
             operand2=Decimal("1")
         )
+
+def test_calculation_string_error():
+    with pytest.raises(OperationError, match="Calculation failed"):
+        calc = Calculation(
+            operation="Addition",
+            operand1="1",
+            operand2="3"
+        )
+        assert str(calc) == "Addition: 1 + 3 = 4"
