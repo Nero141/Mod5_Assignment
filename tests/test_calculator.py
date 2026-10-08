@@ -207,3 +207,8 @@ def test_save_empty_history(mock_to_csv, calculator):
 def test_load_history_no_file(mock_exists, calculator):
     calculator.load_history()
     assert calculator.history == []
+
+def test_keyboard_exception(calculator):
+    with pytest.raises(KeyboardInterrupt):
+        with patch('builtins.input', side_effect=KeyboardInterrupt):
+            calculator_repl()
