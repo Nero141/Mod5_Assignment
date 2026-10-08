@@ -214,3 +214,28 @@ def test_keyboard_exception(mock_print, mock_input):
     calculator_repl()
 
     mock_print.assert_any_call("\nOperation cancelled")
+
+@patch('builtins.input', side_effect=EOFError())
+@patch('builtins.print')
+def test_calculator_repl_eof_error(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("\nInput terminated. Exiting...")
+
+@patch('builtins.input', side_effect=['add', '2', '3', 'exit'])
+@patch('builtins.print')
+@patch('app.calculator_repl.Calculator.perform_operation',
+       side_effect=Exception("Test error"))
+def test_calculator_repl_unexpected_error(mock_operation, mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("Error: Test error")
+
+@patch('builtins.input', side_effect=['blah', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_unknown_command(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call(
+        "Unknown command: 'blah'. Type 'help' for available commands."
+    )
