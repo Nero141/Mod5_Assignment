@@ -178,3 +178,32 @@ def test_calculator_repl_help(mock_print, mock_input):
 def test_calculator_repl_addition(mock_print, mock_input):
     calculator_repl()
     mock_print.assert_any_call("\nResult: 5")
+
+def test_show_history(calculator):
+    operation = OperationFactory.create_operation('add')
+    calculator.set_operation(operation)
+    calculator.perform_operation(2, 3)
+
+    history = calculator.show_history()
+
+    assert history == ["Addition(2, 3) = 5"]
+
+
+def test_undo_empty(calculator):
+    assert calculator.undo() is False
+
+
+def test_redo_empty(calculator):
+    assert calculator.redo() is False
+
+
+@patch('app.calculator.pd.DataFrame.to_csv')
+def test_save_empty_history(mock_to_csv, calculator):
+    calculator.save_history()
+    mock_to_csv.assert_called_once()
+
+
+@patch('app.calculator.Path.exists', return_value=False)
+def test_load_history_no_file(mock_exists, calculator):
+    calculator.load_history()
+    assert calculator.history == []
