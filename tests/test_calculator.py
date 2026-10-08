@@ -242,7 +242,8 @@ def test_calculator_repl_unknown_command(mock_print, mock_input):
 
 @patch('builtins.input', side_effect=['history', 'exit'])
 @patch('builtins.print')
-def test_calculator_repl_empty_history(mock_print, mock_input):
+@patch('app.calculator_repl.Calculator.show_history', return_value=[])
+def test_calculator_repl_empty_history(mock_history, mock_print, mock_input):
     calculator_repl()
 
     mock_print.assert_any_call("No calculations in history")
