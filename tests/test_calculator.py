@@ -239,3 +239,72 @@ def test_calculator_repl_unknown_command(mock_print, mock_input):
     mock_print.assert_any_call(
         "Unknown command: 'blah'. Type 'help' for available commands."
     )
+
+@patch('builtins.input', side_effect=['history', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_empty_history(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("No calculations in history")
+
+@patch('builtins.input', side_effect=['add', '2', '3', 'history', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_history(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("\nCalculation History:")
+    mock_print.assert_any_call("1. Addition(2, 3) = 5")
+
+@patch('builtins.input', side_effect=['clear', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_clear(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("History cleared")
+
+@patch('builtins.input', side_effect=['add', '2', '3', 'undo', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_undo(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("Operation undone")
+
+@patch('builtins.input', side_effect=['undo', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_undo_empty(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("Nothing to undo")
+
+@patch('builtins.input', side_effect=['add', '2', '3', 'undo', 'redo', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_redo(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("Operation redone")
+
+@patch('builtins.input', side_effect=['redo', 'exit'])
+@patch('builtins.print')
+def test_calculator_repl_redo_empty(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("Nothing to redo")
+
+@patch('builtins.input', side_effect=['save', 'exit'])
+@patch('builtins.print')
+@patch('app.calculator_repl.Calculator.save_history')
+def test_calculator_repl_save(mock_save, mock_print, mock_input):
+    calculator_repl()
+
+    mock_save.assert_called()
+    mock_print.assert_any_call("History saved successfully")
+
+@patch('builtins.input', side_effect=['load', 'exit'])
+@patch('builtins.print')
+@patch('app.calculator_repl.Calculator.load_history')
+def test_calculator_repl_load(mock_load, mock_print, mock_input):
+    calculator_repl()
+
+    mock_load.assert_called()
+    mock_print.assert_any_call("History loaded successfully")
+
