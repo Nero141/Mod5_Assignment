@@ -208,7 +208,9 @@ def test_load_history_no_file(mock_exists, calculator):
     calculator.load_history()
     assert calculator.history == []
 
-def test_keyboard_exception(calculator):
-    with pytest.raises(KeyboardInterrupt):
-        with patch('builtins.input', side_effect=KeyboardInterrupt):
-            calculator_repl()
+@patch('builtins.input', side_effect=[KeyboardInterrupt(), 'exit'])
+@patch('builtins.print')
+def test_keyboard_exception(mock_print, mock_input):
+    calculator_repl()
+
+    mock_print.assert_any_call("\nOperation cancelled")
