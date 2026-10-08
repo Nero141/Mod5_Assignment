@@ -229,7 +229,7 @@ def test_calculator_repl_eof_error(mock_print, mock_input):
 def test_calculator_repl_unexpected_error(mock_operation, mock_print, mock_input):
     calculator_repl()
 
-    mock_print.assert_any_call("Error: Test error")
+    mock_print.assert_any_call("Unexpected error: Test error")
 
 @patch('builtins.input', side_effect=['blah', 'exit'])
 @patch('builtins.print')
